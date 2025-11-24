@@ -1,0 +1,89 @@
+body {
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+background: #f3f4f6;
+color: #1a1a1a;
+}
+
+.container {
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+padding: 20px;
+}
+
+.login-box {
+background: #ffffff;
+padding: 30px;
+width: 100%;
+max-width: 450px;
+border-radius: 12px;
+box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.login-box h2 {
+margin-top: 0;
+text-align: center;
+margin-bottom: 25px;
+}
+
+.form-registro label {
+font-weight: bold;
+font-size: 14px;
+display: block;
+margin-bottom: 6px;
+}
+
+.form-registro input {
+width: 95%;
+padding: 10px;
+margin-bottom: 16px;
+border-radius: 6px;
+border: 1px solid #cccccc;
+font-size: 16px;
+}
+
+.btn-primary {
+width: 100%;
+background: #2563eb;
+color: white;
+padding: 12px;
+border-radius: 8px;
+border: none;
+font-size: 16px;
+cursor: pointer;
+margin-top: 10px;
+}
+
+.btn-primary:hover {
+background: #1d4ed8;
+}
+
+.btn-secondary {
+background: #4b5563;
+color: white;
+padding: 12px;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+font-size: 15px;
+}
+
+.btn-secondary:hover {
+background: #374151;
+}
+
+.divider {
+margin: 20px 0;
+height: 1px;
+background: #e5e7eb;
+}
+
+.actions {
+display: flex;
+flex-direction: column;
+gap: 12px;
+margin-top: 10px;
+}
