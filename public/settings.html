@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShellQuest - Configuración SSH</title>
+    
+    <link rel="stylesheet" href="../src/css/challenges.css">
+    <link rel="stylesheet" href="../src/css/settings.css">
+</head>
+<body>
+
+    <header class="header">
+        <h1>
+        <a href="challenges.html" class="logo-link">ShellQuest</a>
+        </h1>
+        
+        <div class="user-menu-container">
+            <button id="userBtn" class="user-avatar-btn" aria-label="Menu">
+                <svg class="avatar-svg" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </button>
+            <div id="userDropdown" class="dropdown-menu">
+                <div class="dropdown-header">Usuario</div>
+                <a href="#">Mi Perfil</a>
+                <a href="#" id="settingsBtn">Configuración</a>
+                <a href="#" id="logoutBtn">Cerrar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="settings-container">
+            
+            <div class="settings-header">
+                <h2 class="page-title">Mis Claves SSH</h2>
+                <button id="btnAddKey" class="btn-primary btn-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Nueva Clave
+                </button>
+            </div>
+
+            <!-- <p class="settings-desc">Gestiona las claves públicas autorizadas para acceder a los entornos.</p> -->
+
+            <div class="challenges-container" id="sshListContainer">
+                <div class="list-header ssh-grid-cols">
+                    <span>Tipo</span>
+                    <span>Clave Pública</span>
+                    <span>Fecha Alta</span>
+                </div>
+                
+                <div id="sshKeyListBody">
+                    </div>
+            </div>
+
+            <div id="loadingIndicator" style="padding: 20px; text-align: center; color: #6b7280;">Cargando...</div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        ShellQuest · FIUBA · 2025
+    </footer>
+
+    <div id="addKeyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nueva Clave</h3>
+            </div>
+            
+            <form id="addKeyForm">
+                <div class="form-group">
+                    <!-- <label for="keyType">Tipo de Encriptación</label>
+                    <select id="keyType" required class="form-control">
+                        <option value="" disabled selected>Seleccione...</option>
+                        <option value="ssh-rsa">ssh-rsa</option>
+                    </select> -->
+
+                    <label>Tipo de LLave</label>
+                    <input type="type" id="keyType" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="keyContent">Clave Pública</label>
+                    <textarea id="keyContent" rows="5" class="form-control code-font" placeholder="Pegue su clave pública aquí..." required></textarea>
+                </div>
+
+                <div id="modalFeedback" class="feedback-msg"></div>
+
+                <div class="modal-actions">
+                    <button type="button" id="btnCancel" class="btn-secondary">Cancelar</button>
+                    <button type="submit" id="btnSave" class="btn-primary">Guardar Clave</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <template id="keyRowTemplate">
+        <div class="challenge-row ssh-grid-cols">
+            <div><span class="badge-type"></span></div>
+            <div><code class="key-preview"></code></div>
+            <div class="date-cell"></div>
+        </div>
+    </template>
+
+    <script src="../src/js/settings.js"></script>
+</body>
+</html>

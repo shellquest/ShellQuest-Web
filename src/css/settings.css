@@ -1,0 +1,108 @@
+.settings-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.page-title {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1.5rem;
+}
+
+.settings-desc {
+    color: #4b5563;
+    margin-bottom: 25px;
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+.nav-link:hover { color: white; text-decoration: underline; }
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.table-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15); 
+    overflow: hidden;
+}
+
+.ssh-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.ssh-table tr:last-child td { border-bottom: none; }
+.ssh-table tr:hover { background-color: #f8fafc; }
+
+
+.badge-type {
+    background-color: #eff6ff;
+    /* color: #2563eb; */
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.key-preview {
+    font-family: 'Courier New', Courier, monospace;
+    background: #f3f4f6;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #374151;
+    font-size: 0.9rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px;
+}
+
+.date-cell {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.form-control:focus {
+    outline: 2px solid #2563eb;
+    border-color: transparent;
+}
+.code-font {
+    font-family: monospace;
+    font-size: 14px;
+}
