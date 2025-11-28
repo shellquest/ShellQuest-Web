@@ -97,7 +97,8 @@ async function fetchChallenges() {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         backendData = await response.json();
-        challengesData = [...backendData, ...mockData];
+        // challengesData = [...backendData, ...mockData];
+        challengesData = backendData
         renderList();
         elements.loading.style.display = 'none';
         elements.container.style.display = 'block';
