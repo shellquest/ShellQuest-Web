@@ -14,12 +14,28 @@ async function login(event) {
         }),
     });
     console.log(response);
-    if (response.ok) {
-        const data = await response.json();
-        console.log("Login successful:", data);
 
+    if (response.ok) {
+        const authData = await response.json();
+        console.log("Login successful:", authData);
+        const userId = authData.user_id; 
+        let fullUserData = authData;
+        if (userId) {
+            try {
+                // Consulta al endpoint de detalles del usuario
+                const userDetailResponse = await fetch(`http://127.0.0.1:8000/users/${userId}`);
+                if (userDetailResponse.ok) {
+                    fullUserData = await userDetailResponse.json();
+                    console.log("Datos de usuario completos fetched:", fullUserData);
+                } else {
+                    console.warn("Login OK, pero no se pudo cargar el detalle del usuario.");
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        }
         if (window.AppState) {
-            AppState.login(data); 
+            AppState.login(fullUserData);
         } else {
             console.error("Error: AppState no está cargado");
         }
@@ -36,4 +52,3 @@ async function login(event) {
 function goToRegister() {
     window.location.href = "register.html";
 }
-

@@ -199,6 +199,33 @@ body {
 
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
 
+/* string de conexion */
+/* Contenedor del bloque SSH */
+.ssh-command-container {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e7eb; /* Una línea sutil para separar de la descripción */
+}
+
+/* El título/instrucción */
+.ssh-instruction-label {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #1f2937; /* Un poco más oscuro que la descripción para resaltar el título */
+}
+
+/* El comando SSH con el mismo estilo que la descripción */
+.ssh-command-text {
+    color: #4b5563;       /* Mismo color gris que .modal-description */
+    font-family: Arial, sans-serif; /* Misma fuente que el body/descripción */
+    line-height: 1.6;
+    font-size: 1rem;
+    background: transparent;
+    padding: 0;
+    word-break: break-all; /* Para evitar que se salga si es muy largo */
+}
+
 /* Mensajes de feedback */
 .feedback-msg { margin-top: 15px; padding: 10px; border-radius: 6px; text-align: center; display: none; font-weight: bold;}
 .feedback-msg.error { background: #fee2e2; color: #991b1b; }

@@ -62,9 +62,12 @@
             </div>
 
             <div class="ssh-command-container">
-                <code id="sshCommandDisplay" style="background: #1f2937; color: #10b981; padding: 10px; display: block; border-radius: 6px; font-family: monospace; overflow-x: auto;">
-                    ssh -i &lt;ruta de la llave privada&gt; -p 22 shellquest@ip tag
-                </code>
+                <p class="ssh-instruction-label">Metodo de conexion:</p>
+                
+                <div class="terminal-box">
+                    <span class="terminal-prompt">$</span>
+                    <code id="sshCommandDisplay">ssh ...</code>
+                </div>
             </div>
 
             <div id="modalFeedback" class="feedback-msg"></div>

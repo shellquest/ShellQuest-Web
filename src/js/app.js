@@ -2,6 +2,8 @@ const AppState = {
     KEY: 'shellquest_session',
 
     login: (userData) => {
+        // aske backend user info and store in localStorage
+
         localStorage.setItem(AppState.KEY, JSON.stringify(userData));
     },
 
@@ -33,6 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('.dropdown-header');
     
     if (user && header) {
-        header.textContent = user.user_id || user.id || "Usuario"; 
+        header.textContent = `${user.first_name} ${user.last_name} - ${user.legajo}`;
     }
 });

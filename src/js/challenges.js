@@ -64,23 +64,40 @@ function setupEventListeners() {
 
 async function fetchChallenges() {
     try {
-        const userId = AppState.getUser().user_id;
+        const userId = AppState.getUser().legajo;
         const GET_USER_CHALLENGES = `http://127.0.0.1:8000/users/${userId}/challenges/`;
 
-        // Mock Data 
-        challengesData = [
-            { title: "Hello Shell",
-            tag: "LINUX",
-            status: true,
-            desc: "Conéctate al servidor 123456789 112312312312312312asfsadfsdfsadffsdfsadfsadfsafssadf"},
-            { title: "ls", tag: "123", status: false, desc: "Lista los archivos en el directorio /home/user/docs " },
-            { title: "cat", tag: "1234", status: null, desc: "Muestra el contenido del archivo /home/user/docs/file.txt " },
-        ];
 
-        // const response = await fetch(GET_USER_CHALLENGES);
-        // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        // challengesData = await response.json();
-        // console.log("Desafíos cargados:", challengesData);
+        //     example of json data from backend
+        // "challenge_id": 1,
+        // "name": "Hello World",
+        // "tag": "busybox",
+        // "description": "Conéctate al servidor usando el comando ssh y ejecuta 'echo Hello World' para completar este desafío.",
+        // "passed": null
+
+            // Mock Data 
+    //     const mockData = [
+    //     {
+    //         challenge_id: 3,
+    //         name: "List Files",
+    //         tag: "LINUX",
+    //         description: "Lista los archivos en el directorio /home/user/docs usando 'ls'.",
+    //         passed: true
+    //     },
+    //     {
+    //         challenge_id: 4,
+    //         name: "Show File Content",
+    //         tag: "LINUX",
+    //         description: "Muestra el contenido del archivo /home/user/docs/file.txt usando 'cat'.",
+    //         passed: false
+    //     }
+    // ];
+
+        const response = await fetch(GET_USER_CHALLENGES);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        backendData = await response.json();
+        challengesData = [...backendData, ...mockData];
         renderList();
         elements.loading.style.display = 'none';
         elements.container.style.display = 'block';
@@ -100,22 +117,21 @@ function renderList() {
         const clone = elements.template.content.cloneNode(true);
         const row = clone.querySelector('.challenge-row');
         
-        row.querySelector('.row-title').textContent = challenge.title;
+        row.querySelector('.row-title').textContent = challenge.name;
         row.querySelector('.row-tag').textContent = challenge.tag;
-        
 
         const statusDiv = row.querySelector('.row-status');
-        if (challenge.status == true) {
+        if (challenge.passed == true) {
             row.classList.add('row-completed-bg');
             statusDiv.innerHTML = '<span class="status-badge status-completed">✔ Completado</span>';
-        } else if (challenge.status === null){
-            statusDiv.innerHTML = '<span class="status-badge status-pending">Pendiente</span>';
+        } else if (challenge.passed == null){
+            statusDiv.innerHTML = '<span class="status-badge status-pending">Sin intentos</span>';
         } else {
             row.classList.add('row-rejected-bg');
             statusDiv.innerHTML = '<span class="status-badge status-incomplete">✘ Rechazado</span>';
         }
 
-        row.addEventListener('click', () => openModal(challenge.id));
+        row.addEventListener('click', () => openModal(challenge.challenge_id));
 
         elements.list.appendChild(clone);
     });
@@ -124,14 +140,14 @@ function renderList() {
 // Modal Functions
 
 function openModal(id) {
-    const challenge = challengesData.find(c => c.id === id);
+    const challenge = challengesData.find(c => c.challenge_id == id);
     if (!challenge) return;
 
     currentChallengeId = id;
 
-    elements.mTitle.textContent = challenge.title;
+    elements.mTitle.textContent = challenge.name;
     elements.mTag.textContent = challenge.tag;
-    elements.mDesc.textContent = challenge.desc;
+    elements.mDesc.textContent = challenge.description;
     const clientIp = window.location.hostname;
     elements.sshCommand.textContent = `ssh -i <ruta de la llave privada> -p 22 shellquest@${clientIp} ${challenge.tag}`;
     //feedback

@@ -29,7 +29,7 @@ async function fetchKeys() {
     elements.listBody.innerHTML = '';
 
     try {
-        const userId = AppState.getUser().user_id;
+        const userId = AppState.getUser().legajo;
         const GET_AUTHORIZED_KEYS_API = `http://127.0.0.1:8000/users/${userId}/authorized-keys/`;
         const response = await fetch(GET_AUTHORIZED_KEYS_API, {
             method: 'GET',
@@ -43,14 +43,8 @@ async function fetchKeys() {
         }
 
         const keys = await response.json();
-        // agregar created_at a las keys
-        date = new Date();
-        keys.forEach(k => k.created_at = date.toLocaleDateString());
+        keys.forEach(k => k.created_at = new Date(k.created_at * 1000).toLocaleDateString());
         console.log(keys);
-        // const keys = [
-        //     { key_type: "ssh-rsa", key: "ssh-rsa s", created_at: "2025-10-12" },
-        //     { key_type: "ssh-ed25519", key: "ssh-sada", created_at: "2025-11-05" }
-        // ];
         renderKeys(keys);
     } catch (error) {
         console.error(error);
@@ -73,7 +67,7 @@ function renderKeys(keys) {
         clone.querySelector('.badge-type').textContent = k.key_type;
         
         const codeEl = clone.querySelector('.key-preview');
-        codeEl.textContent = k.key;
+        codeEl.textContent = k.fingerprint;
         codeEl.title = k.key; 
 
         clone.querySelector('.date-cell').textContent = k.created_at;
@@ -141,8 +135,10 @@ async function handleSave(e) {
 
     try {
         // Simular POST al backend
-        const userId = AppState.getUser().user_id;
+        const userId = AppState.getUser().legajo;
+     
         const POST_AUTHORIZED_KEYS_API = `http://127.0.0.1:8000/users/${userId}/authorized-keys/`;
+        console.log('POST:', POST_AUTHORIZED_KEYS_API, keyType, keyContent, userId);
         const response = await fetch(POST_AUTHORIZED_KEYS_API, {
             method: 'POST',
             headers: {
