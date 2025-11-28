@@ -17,7 +17,14 @@ async function login(event) {
     if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
-        alert("Inicio de sesión exitoso 🎉")
+
+        if (window.AppState) {
+            AppState.login(data); 
+        } else {
+            console.error("Error: AppState no está cargado");
+        }
+
+        alert("Inicio de sesión exitoso 🎉");
         window.location.href = "challenges.html";
     } else {
         const errorData = await response.json();

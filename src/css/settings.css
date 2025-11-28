@@ -58,34 +58,36 @@
 .ssh-table tr:hover { background-color: #f8fafc; }
 
 
-.badge-type {
-    background-color: #eff6ff;
-    /* color: #2563eb; */
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    display: inline-block;
+.ssh-grid-cols {
+    display: grid;
+    /* Ajustamos proporciones: Tipo(pequeño) - Clave(grande) - Fecha(medio) */
+    grid-template-columns: 100px 1fr 150px; 
+    gap: 15px;
+    align-items: center;
 }
 
+/* Estilo de la Clave SSH */
 .key-preview {
-    font-family: 'Courier New', Courier, monospace;
-    background: #f3f4f6;
-    padding: 4px 8px;
-    border-radius: 4px;
-    color: #374151;
-    font-size: 0.9rem;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace; /* Fuente monoespaciada */
+    font-size: 0.85rem;
+    color: #111827;           /* Texto Negro */
+    background-color: #f3f4f6; /* Fondo gris/blanco suave */
+    padding: 6px 10px;        /* Un poco de aire interno */
+    border-radius: 6px;       /* Bordes redondeados */
+    border: 1px solid #e5e7eb; /* Borde sutil */
+    
     display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 400px;
+    max-width: 100%;          /* Que no rompa el grid */
 }
 
+/* Ajuste para que la fecha se alinee a la derecha si prefieres, o izquierda por defecto */
 .date-cell {
     color: #6b7280;
     font-size: 0.9rem;
+    text-align: right; 
 }
 
 .form-control {

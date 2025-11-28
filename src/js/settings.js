@@ -18,9 +18,8 @@ const elements = {
     settingsBtn: document.getElementById('settingsBtn')
 };
 
-const API_URL = '/api/ssh-keys';
-
 async function initApp() {
+    AppState.checkAuth();
     setupEventListeners();
     await fetchKeys();
 }
@@ -30,14 +29,28 @@ async function fetchKeys() {
     elements.listBody.innerHTML = '';
 
     try {
-        
-        await new Promise(r => setTimeout(r, 600));
-        
-        const keys = [
-            { key_type: "ssh-rsa", key: "ssh-rsa s", created_at: "2025-10-12" },
-            { key_type: "ssh-ed25519", key: "ssh-sada", created_at: "2025-11-05" }
-        ];
+        const userId = AppState.getUser().user_id;
+        const GET_AUTHORIZED_KEYS_API = `http://127.0.0.1:8000/users/${userId}/authorized-keys/`;
+        const response = await fetch(GET_AUTHORIZED_KEYS_API, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
+        if (!response.ok) {
+            throw new Error('Error al obtener las claves SSH');
+        }
+
+        const keys = await response.json();
+        // agregar created_at a las keys
+        date = new Date();
+        keys.forEach(k => k.created_at = date.toLocaleDateString());
+        console.log(keys);
+        // const keys = [
+        //     { key_type: "ssh-rsa", key: "ssh-rsa s", created_at: "2025-10-12" },
+        //     { key_type: "ssh-ed25519", key: "ssh-sada", created_at: "2025-11-05" }
+        // ];
         renderKeys(keys);
     } catch (error) {
         console.error(error);
@@ -113,10 +126,10 @@ function closeModal() {
 async function handleSave(e) {
     e.preventDefault();
     
-    const type = document.getElementById('keyType').value;
-    const content = document.getElementById('keyContent').value.trim();
+    const keyType = document.getElementById('keyType').value;
+    const keyContent = document.getElementById('keyContent').value.trim();
 
-    if(!content) {
+    if(!keyType || !keyContent) {
         showFeedback("Por favor completa todos los campos", "error");
         return;
     }
@@ -128,15 +141,27 @@ async function handleSave(e) {
 
     try {
         // Simular POST al backend
-        console.log("Enviando a API:", { key_type: type, key: content });
-        
-        await new Promise(r => setTimeout(r, 800)); // Delay red
-        
+        const userId = AppState.getUser().user_id;
+        const POST_AUTHORIZED_KEYS_API = `http://127.0.0.1:8000/users/${userId}/authorized-keys/`;
+        const response = await fetch(POST_AUTHORIZED_KEYS_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                keytype: keyType,
+                key: keyContent
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al guardar la clave SSH');
+        }
         // Éxito
         showFeedback("Clave agregada correctamente", "success");
         setTimeout(() => {
             closeModal();
-            fetchKeys(); // Recargar tabla
+            fetchKeys();
         }, 1000);
 
     } catch (err) {

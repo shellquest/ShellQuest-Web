@@ -26,7 +26,14 @@ async function registerUser(event) {
         const data = await response.json();
         alert("Registro exitoso 🎉 Ahora podés iniciar sesión.");
         console.log("Registration successful:", data);
-        window.location.href = "index.html";
+
+        if (window.AppState) {
+            AppState.logout();
+        } else {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
     } else {
         const errorData = await response.json();
         console.error("Registration failed:", errorData);

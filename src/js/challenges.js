@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let challengesData = [];
 let currentChallengeId = null;
-
 // Dom Elements
 const elements = {
     loading: document.getElementById('loadingIndicator'),
@@ -23,10 +22,11 @@ const elements = {
     mDesc: document.getElementById('mDesc'),
     mFeedback: document.getElementById('modalFeedback'),
     btnCloseModal: document.getElementById('btnCloseModal'),
-    btnValidate: document.getElementById('btnValidate')
+    sshCommand: document.getElementById('sshCommandDisplay'),
 };
 
 async function initApp() {
+    AppState.checkAuth();
     setupEventListeners();
     await fetchChallenges();
 }
@@ -46,7 +46,8 @@ function setupEventListeners() {
 
     elements.logoutBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        if(confirm("¿Cerrar sesión?")) window.location.href = "index.html";
+        if(confirm("¿Cerrar sesión?"))AppState.logout();
+        
     });
 
     elements.settingsBtn.addEventListener('click', (e) => {
@@ -56,7 +57,6 @@ function setupEventListeners() {
 
     // Modal
     elements.btnCloseModal.addEventListener('click', closeModal);
-    elements.btnValidate.addEventListener('click', validateSolution);
     elements.modal.addEventListener('click', (e) => {
         if (e.target === elements.modal) closeModal();
     });
@@ -64,16 +64,23 @@ function setupEventListeners() {
 
 async function fetchChallenges() {
     try {
+        const userId = AppState.getUser().user_id;
+        const GET_USER_CHALLENGES = `http://127.0.0.1:8000/users/${userId}/challenges/`;
 
         // Mock Data 
         challengesData = [
-            { id: 1, title: "Hello Shell",
-                tag: "LINUX", 
-                completed: true, 
-                desc: "Conéctate al servidor 1234"},
-            {id: 2, title: "ls", tag: "LINUX", completed: false, desc: "Lista los archivos en el directorio /home/user/docs" },
+            { title: "Hello Shell",
+            tag: "LINUX",
+            status: true,
+            desc: "Conéctate al servidor 123456789 112312312312312312asfsadfsdfsadffsdfsadfsadfsafssadf"},
+            { title: "ls", tag: "123", status: false, desc: "Lista los archivos en el directorio /home/user/docs " },
+            { title: "cat", tag: "1234", status: null, desc: "Muestra el contenido del archivo /home/user/docs/file.txt " },
         ];
 
+        // const response = await fetch(GET_USER_CHALLENGES);
+        // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        // challengesData = await response.json();
+        // console.log("Desafíos cargados:", challengesData);
         renderList();
         elements.loading.style.display = 'none';
         elements.container.style.display = 'block';
@@ -96,13 +103,16 @@ function renderList() {
         row.querySelector('.row-title').textContent = challenge.title;
         row.querySelector('.row-tag').textContent = challenge.tag;
         
-        // Estado
+
         const statusDiv = row.querySelector('.row-status');
-        if (challenge.completed) {
+        if (challenge.status == true) {
             row.classList.add('row-completed-bg');
             statusDiv.innerHTML = '<span class="status-badge status-completed">✔ Completado</span>';
-        } else {
+        } else if (challenge.status === null){
             statusDiv.innerHTML = '<span class="status-badge status-pending">Pendiente</span>';
+        } else {
+            row.classList.add('row-rejected-bg');
+            statusDiv.innerHTML = '<span class="status-badge status-incomplete">✘ Rechazado</span>';
         }
 
         row.addEventListener('click', () => openModal(challenge.id));
@@ -122,11 +132,11 @@ function openModal(id) {
     elements.mTitle.textContent = challenge.title;
     elements.mTag.textContent = challenge.tag;
     elements.mDesc.textContent = challenge.desc;
-    
+    const clientIp = window.location.hostname;
+    elements.sshCommand.textContent = `ssh -i <ruta de la llave privada> -p 22 shellquest@${clientIp} ${challenge.tag}`;
     //feedback
     elements.mFeedback.style.display = 'none';
     elements.mFeedback.className = "feedback-msg";
-    elements.btnValidate.style.display = 'inline-block';
     elements.modal.classList.add('active');
 }
 
@@ -142,39 +152,3 @@ function showFeedback(msg, type) {
 }
 
 
-async function validateSolution() {
-
-    const originalText = elements.btnValidate.textContent;
-    elements.btnValidate.textContent = "Verificando...";
-    elements.btnValidate.disabled = true;
-
-    try {
-        await new Promise(resolve => setTimeout(resolve, 600));
-
-        const challenge = challengesData.find(c => c.id === currentChallengeId);
-
-        //  Pedir al back que valide la solucion 
-
-        if (true) {
-
-            challenge.completed = true;
-            showFeedback("🎉 ¡Correcto!", "success");
-            renderList();
-            
-            // Cerrar modal tras breve espera
-            setTimeout(() => {
-                closeModal();
-            }, 1500);
-
-        } else {
-            // ERROR
-            showFeedback("❌ Inténtalo de nuevo.", "error");
-        }
-
-    } catch (err) {
-        showFeedback("Error de conexión.", "error");
-    } finally {
-        elements.btnValidate.textContent = originalText;
-        elements.btnValidate.disabled = false;
-    }
-}

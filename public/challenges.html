@@ -9,7 +9,9 @@
 <body>
 
     <header class="header">
-        <h1>ShellQuest</h1>
+        <h1>
+        <a href="challenges.html" class="logo-link">ShellQuest</a>
+        </h1>
         
         <div class="user-menu-container">
             <button id="userBtn" class="user-avatar-btn" aria-label="Menu">
@@ -39,7 +41,6 @@
                 <span>Nombre</span>
                 <span>Tag</span>
                 <span>Estado</span>
-                <span></span>
             </div>
             <div id="challengesList"></div>
         </div>
@@ -55,16 +56,21 @@
                 <h3 id="mTitle">Título del Desafío</h3>
                 <span id="mTag" class="row-tag" style="margin-top: 5px;">TAG</span>
             </div>
-            
+
             <div id="mDesc" class="modal-description">
                 Descripción del desafío...
+            </div>
+
+            <div class="ssh-command-container">
+                <code id="sshCommandDisplay" style="background: #1f2937; color: #10b981; padding: 10px; display: block; border-radius: 6px; font-family: monospace; overflow-x: auto;">
+                    ssh -i &lt;ruta de la llave privada&gt; -p 22 shellquest@ip tag
+                </code>
             </div>
 
             <div id="modalFeedback" class="feedback-msg"></div>
 
             <div class="modal-actions">
                 <button id="btnCloseModal" class="btn-secondary">Cerrar</button>
-                <button id="btnValidate" class="btn-primary">Validar Solución</button>
             </div>
         </div>
     </div>
@@ -74,10 +80,9 @@
             <div class="row-title"></div>
             <div><span class="row-tag"></span></div>
             <div class="row-status"></div>
-            <div class="row-arrow">➔</div>
         </div>
     </template>
-
+    <script src="../src/js/app.js"></script>
     <script src="../src/js/challenges.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@
     
     <link rel="stylesheet" href="../src/css/challenges.css">
     <link rel="stylesheet" href="../src/css/settings.css">
+
 </head>
 <body>
 
@@ -43,13 +44,11 @@
                 </button>
             </div>
 
-            <!-- <p class="settings-desc">Gestiona las claves públicas autorizadas para acceder a los entornos.</p> -->
-
             <div class="challenges-container" id="sshListContainer">
                 <div class="list-header ssh-grid-cols">
                     <span>Tipo</span>
-                    <span>Clave Pública</span>
-                    <span>Fecha Alta</span>
+                    <span>Clave</span>
+                    <span>Fecha de Creación</span>
                 </div>
                 
                 <div id="sshKeyListBody">
@@ -73,14 +72,12 @@
             
             <form id="addKeyForm">
                 <div class="form-group">
-                    <!-- <label for="keyType">Tipo de Encriptación</label>
-                    <select id="keyType" required class="form-control">
-                        <option value="" disabled selected>Seleccione...</option>
-                        <option value="ssh-rsa">ssh-rsa</option>
-                    </select> -->
 
-                    <label>Tipo de LLave</label>
-                    <input type="type" id="keyType" required>
+                <div class="form-group">
+                    <label for="keyType">Tipo de Llave</label>
+                    <input type="text" id="keyType" class="form-control" placeholder="Ej: ssh-rsa" required>
+                </div>
+
                 </div>
 
                 <div class="form-group">
@@ -106,6 +103,7 @@
         </div>
     </template>
 
+    <script src="../src/js/app.js"></script>
     <script src="../src/js/settings.js"></script>
 </body>
 </html>
