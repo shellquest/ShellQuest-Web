@@ -6,9 +6,8 @@ async function registerUser(event) {
     password = document.getElementById("password").value;
     padron = document.getElementById("padron").value;
     console.log(firstName, lastName, email, password, padron);
-    REGISTER_URL = "http://127.0.0.1:8000/signup/";
 
-    const response = await fetch(REGISTER_URL, {
+    const response = await fetch('/signup/', {
     method: "POST",
     headers: {
         "Content-Type": "application/json",

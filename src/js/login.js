@@ -2,8 +2,7 @@ async function login(event) {
     event.preventDefault();
     const padron = document.getElementById("padron").value;
     const password = document.getElementById("password").value;
-    const LOGIN_URL = "http://127.0.0.1:8000/login/";
-    const response = await fetch(LOGIN_URL, {
+    const response = await fetch('/login/', {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -23,7 +22,7 @@ async function login(event) {
         if (userId) {
             try {
                 // Consulta al endpoint de detalles del usuario
-                const userDetailResponse = await fetch(`http://127.0.0.1:8000/users/${userId}`);
+                const userDetailResponse = await fetch(`/users/${userId}`);
                 if (userDetailResponse.ok) {
                     fullUserData = await userDetailResponse.json();
                     console.log("Datos de usuario completos fetched:", fullUserData);

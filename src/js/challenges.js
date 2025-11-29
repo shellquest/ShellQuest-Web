@@ -1,9 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
-    initApp();
-});
+document.addEventListener('DOMContentLoaded', initApp);
 
-let challengesData = [];
-let currentChallengeId = null;
 // Dom Elements
 const elements = {
     loading: document.getElementById('loadingIndicator'),
@@ -65,7 +61,6 @@ function setupEventListeners() {
 async function fetchChallenges() {
     try {
         const userId = AppState.getUser().legajo;
-        const GET_USER_CHALLENGES = `http://127.0.0.1:8000/users/${userId}/challenges/`;
 
 
         //     example of json data from backend
@@ -93,13 +88,11 @@ async function fetchChallenges() {
     //     }
     // ];
 
-        const response = await fetch(GET_USER_CHALLENGES);
+        const response = await fetch(`/users/${userId}/challenges/`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         backendData = await response.json();
-        // challengesData = [...backendData, ...mockData];
-        challengesData = backendData
-        renderList();
+        renderList(backendData);
         elements.loading.style.display = 'none';
         elements.container.style.display = 'block';
 
@@ -110,7 +103,7 @@ async function fetchChallenges() {
     }
 }
 
-function renderList() {
+function renderList(challengesData) {
     elements.list.innerHTML = '';
     
     challengesData.forEach(challenge => {
@@ -132,7 +125,7 @@ function renderList() {
             statusDiv.innerHTML = '<span class="status-badge status-incomplete">✘ Rechazado</span>';
         }
 
-        row.addEventListener('click', () => openModal(challenge.challenge_id));
+        row.addEventListener('click', () => openModal(challenge));
 
         elements.list.appendChild(clone);
     });
@@ -140,17 +133,12 @@ function renderList() {
 
 // Modal Functions
 
-function openModal(id) {
-    const challenge = challengesData.find(c => c.challenge_id == id);
-    if (!challenge) return;
-
-    currentChallengeId = id;
-
+function openModal(challenge) {
     elements.mTitle.textContent = challenge.name;
     elements.mTag.textContent = challenge.tag;
     elements.mDesc.textContent = challenge.description;
     const clientIp = window.location.hostname;
-    elements.sshCommand.textContent = `ssh -i <ruta de la llave privada> -p 22 shellquest@${clientIp} ${challenge.tag}`;
+    elements.sshCommand.textContent = `ssh -i <ruta de la llave privada> shellquest@${clientIp} ${challenge.tag}`;
     //feedback
     elements.mFeedback.style.display = 'none';
     elements.mFeedback.className = "feedback-msg";
@@ -159,7 +147,6 @@ function openModal(id) {
 
 function closeModal() {
     elements.modal.classList.remove('active');
-    currentChallengeId = null;
 }
 
 function showFeedback(msg, type) {

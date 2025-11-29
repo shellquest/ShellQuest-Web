@@ -30,8 +30,7 @@ async function fetchKeys() {
 
     try {
         const userId = AppState.getUser().legajo;
-        const GET_AUTHORIZED_KEYS_API = `http://127.0.0.1:8000/users/${userId}/authorized-keys/`;
-        const response = await fetch(GET_AUTHORIZED_KEYS_API, {
+        const response = await fetch(`/users/${userId}/authorized-keys/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -137,9 +136,8 @@ async function handleSave(e) {
         // Simular POST al backend
         const userId = AppState.getUser().legajo;
      
-        const POST_AUTHORIZED_KEYS_API = `http://127.0.0.1:8000/users/${userId}/authorized-keys/`;
-        console.log('POST:', POST_AUTHORIZED_KEYS_API, keyType, keyContent, userId);
-        const response = await fetch(POST_AUTHORIZED_KEYS_API, {
+        console.log('POST:', keyType, keyContent, userId);
+        const response = await fetch(`/users/${userId}/authorized-keys`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
