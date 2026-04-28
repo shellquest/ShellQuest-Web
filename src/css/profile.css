@@ -1,0 +1,168 @@
+
+/* Contenedor principal: Fila centrada con formulario y avatar */
+.container {
+    display: flex;
+    justify-content: center;     /* Centra horizontalmente el bloque completo */
+    align-items: flex-start;     /* Alinea arriba */
+    min-height: 100vh;
+    padding: 40px;
+    gap: 20px;                   /* Espacio entre formulario y círculo (reemplaza margin-left redundante) */
+}
+
+.login-box {
+    background: #ffffff;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+    margin-right: 0;
+}
+
+.login-box h2 {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-registro label {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-registro input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    border: 1px solid #cccccc;
+    font-size: 16px;
+}
+
+.btn-primary {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+    background: #4b5563;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-secondary:hover {
+    background: #374151;
+}
+
+.divider {
+    margin: 20px 0;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* Contenedor circular fijo: Tamaño y forma inalterables, con box-sizing para incluir borde */
+.user-image-container {
+    width: 320px;              /* Tamaño fijo del círculo */
+    height: 320px;
+    min-width: 320px;          /* Bloquea expansión mínima */
+    min-height: 320px;
+    border-radius: 50%;        /* Forma circular perfecta */
+    background: #e5e7eb;       /* Fondo por defecto */
+    border: 8px solid #4f46e5; /* Borde del círculo */
+    box-sizing: border-box;    /* Incluye borde en el ancho/alto fijo, previniendo expansión */
+    position: relative;        /* Necesario para posicionar elementos internos absolutamente */
+    overflow: hidden;          /* Recorta cualquier contenido que sobresalga */
+    flex-shrink: 0;            /* Evita deformaciones en flexbox */
+    cursor: pointer;
+    /* Eliminé display: flex, align-items, justify-content: ya no necesarios con posicionamiento absoluto */
+}
+
+/* Imagen dentro del círculo: Posicionada absolutamente para ocupar todo el espacio sin deformar el contenedor */
+.user-image-container img {
+    position: absolute;        /* Posiciona la imagen dentro del contenedor relativo */
+    top: 0;
+    left: 0;
+    width: 320px;               /* Ocupa todo el ancho del contenedor (104px internos debido a box-sizing) */
+    height: 320px;              /* Ocupa todo el alto del contenedor */
+    object-fit: cover;         /* Recorta la imagen proporcionalmente dentro del círculo */
+    border-radius: 50%;        /* Asegura forma circular (aunque overflow:hidden ya lo maneja) */
+    display: block;
+    z-index: 1;                /* Asegura que esté por encima del SVG */
+}
+
+/* Avatar por defecto: Centrado absolutamente dentro del círculo */
+.avatar-svg {
+    position: absolute;        /* Posiciona el SVG dentro del contenedor relativo */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centra perfectamente */
+    width: 320px;                /* Escala dentro del círculo */
+    height: 320px;
+    fill: #6b7280;
+    z-index: 0;                /* Debajo de la imagen cuando se carga */
+}
+
+/* Overlay de edición: Ya estaba bien, pero ahora funciona mejor con el posicionamiento absoluto */
+/* Overlay solo dentro del círculo */
+.overlay {
+    position: absolute;   /* se posiciona respecto al contenedor */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;           /* por encima de imagen y SVG */
+    border-bottom-left-radius: 50%; /* opcional: curva para seguir el círculo */
+    border-bottom-right-radius: 50%;
+}
+
+.user-image-container:hover .overlay {
+    opacity: 1;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    border: 1px solid #cccccc;
+    font-size: 16px;
+    resize: vertical; /* permite ajustar altura, pero no ancho */
+}

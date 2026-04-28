@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Público</title>
+
+    <!--Estilos -->
+    <link rel="stylesheet" href="../src/css/landing.css">
+    <link rel="stylesheet" href="../src/css/profile.css">
+
+
+
+</head>
+
+<body>
+
+<header class="header">
+    <h1>ShellQuest</h1>
+</header>
+
+<div class="container">
+
+    <!-- Caja de formulario -->
+    <div class="login-box">
+        <h2>Perfil Público</h2>
+
+        <form class="form-registro" onsubmit="registerUser(event)">
+
+            <label>Nombre</label>
+            <input type="text" id="firstName" required>
+
+            <label>Apellido</label>
+            <input type="text" id="lastName" required>
+
+            <label>Padron</label>
+            <input type="number" id="padron" required>
+
+            <label>Email</label>
+            <input type="email" id="email" required>
+
+            <label>BIO</label>
+            <textarea id="bio" name="bio" rows="5" placeholder="Escribe tu biografía aquí..." required></textarea>
+
+
+            <label>Locación</label>
+            <input type="text" id="locate" required>
+
+            <button type="submit" class="btn-primary">Actualizar Perfil</button>
+        </form>
+    </div>
+
+    <!-- Avatar circular -->
+    <div class="user-image-container" onclick="document.getElementById('fileInput').click()">
+
+        <!-- Imagen cargada -->
+        <img id="profileImage" src="" alt="Foto de perfil" style="display:none;">
+
+        <!-- Avatar por defecto -->
+        <svg class="avatar-svg" id="defaultAvatar" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4
+                     1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8
+                     1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+
+        <div class="overlay">Editar</div>
+    </div>
+
+    <!-- Input real oculto -->
+    <input type="file" id="fileInput" accept="image/*"
+           style="display:none;" onchange="loadImage(event)">
+</div>
+
+<footer class="footer">
+    <p>ShellQuest · FIUBA · 2025</p>
+</footer>
+
+<!-- Script del perfil -->
+<script src="../src/js/profile.js"></script>
+
+</body>
+</html>

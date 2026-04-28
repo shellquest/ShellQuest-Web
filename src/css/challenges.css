@@ -10,17 +10,18 @@ body {
     min-height: 100vh;
 }
 
-.header {
+/*.header {
     background: #1f2937;
     color: white;
     padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
+}*/
 
-.header h1 { margin: 0; font-size: 24px; }
+/*.header h1 { margin: 0; font-size: 24px; }*/
 
 .footer {
     text-align: center;
@@ -61,7 +62,7 @@ body {
 
 .logo-link {
     text-decoration: none; 
-    color: inherit;        
+    color: white;
     cursor: pointer;      
 }
 
