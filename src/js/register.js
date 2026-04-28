@@ -6,9 +6,8 @@ async function registerUser(event) {
     password = document.getElementById("password").value;
     padron = document.getElementById("padron").value;
     console.log(firstName, lastName, email, password, padron);
-    REGISTER_URL = "http://127.0.0.1:8000/signup/";
 
-    const response = await fetch(REGISTER_URL, {
+    const response = await fetch('/signup/', {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -26,7 +25,14 @@ async function registerUser(event) {
         const data = await response.json();
         alert("Registro exitoso 🎉 Ahora podés iniciar sesión.");
         console.log("Registration successful:", data);
-        window.location.href = "index.html";
+
+        if (window.AppState) {
+            AppState.logout();
+        } else {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
     } else {
         const errorData = await response.json();
         console.error("Registration failed:", errorData);

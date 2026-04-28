@@ -1,9 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-    initApp();
-});
-
-let challengesData = [];
-let currentChallengeId = null;
+document.addEventListener('DOMContentLoaded', initApp);
 
 // Dom Elements
 const elements = {
@@ -23,10 +18,11 @@ const elements = {
     mDesc: document.getElementById('mDesc'),
     mFeedback: document.getElementById('modalFeedback'),
     btnCloseModal: document.getElementById('btnCloseModal'),
-    btnValidate: document.getElementById('btnValidate')
+    sshCommand: document.getElementById('sshCommandDisplay'),
 };
 
 async function initApp() {
+    AppState.checkAuth();
     setupEventListeners();
     await fetchChallenges();
 }
@@ -46,7 +42,8 @@ function setupEventListeners() {
 
     elements.logoutBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        if(confirm("¿Cerrar sesión?")) window.location.href = "index.html";
+        if(confirm("¿Cerrar sesión?"))AppState.logout();
+        
     });
 
     elements.settingsBtn.addEventListener('click', (e) => {
@@ -56,7 +53,6 @@ function setupEventListeners() {
 
     // Modal
     elements.btnCloseModal.addEventListener('click', closeModal);
-    elements.btnValidate.addEventListener('click', validateSolution);
     elements.modal.addEventListener('click', (e) => {
         if (e.target === elements.modal) closeModal();
     });
@@ -64,17 +60,39 @@ function setupEventListeners() {
 
 async function fetchChallenges() {
     try {
+        const userId = AppState.getUser().legajo;
 
-        // Mock Data 
-        challengesData = [
-            { id: 1, title: "Hello Shell",
-                tag: "LINUX", 
-                completed: true, 
-                desc: "Conéctate al servidor 1234"},
-            {id: 2, title: "ls", tag: "LINUX", completed: false, desc: "Lista los archivos en el directorio /home/user/docs" },
-        ];
 
-        renderList();
+        //     example of json data from backend
+        // "challenge_id": 1,
+        // "name": "Hello World",
+        // "tag": "busybox",
+        // "description": "Conéctate al servidor usando el comando ssh y ejecuta 'echo Hello World' para completar este desafío.",
+        // "passed": null
+
+            // Mock Data 
+    //     const mockData = [
+    //     {
+    //         challenge_id: 3,
+    //         name: "List Files",
+    //         tag: "LINUX",
+    //         description: "Lista los archivos en el directorio /home/user/docs usando 'ls'.",
+    //         passed: true
+    //     },
+    //     {
+    //         challenge_id: 4,
+    //         name: "Show File Content",
+    //         tag: "LINUX",
+    //         description: "Muestra el contenido del archivo /home/user/docs/file.txt usando 'cat'.",
+    //         passed: false
+    //     }
+    // ];
+
+        const response = await fetch(`/users/${userId}/challenges/`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        backendData = await response.json();
+        renderList(backendData);
         elements.loading.style.display = 'none';
         elements.container.style.display = 'block';
 
@@ -85,7 +103,7 @@ async function fetchChallenges() {
     }
 }
 
-function renderList() {
+function renderList(challengesData) {
     elements.list.innerHTML = '';
     
     challengesData.forEach(challenge => {
@@ -93,19 +111,21 @@ function renderList() {
         const clone = elements.template.content.cloneNode(true);
         const row = clone.querySelector('.challenge-row');
         
-        row.querySelector('.row-title').textContent = challenge.title;
+        row.querySelector('.row-title').textContent = challenge.name;
         row.querySelector('.row-tag').textContent = challenge.tag;
-        
-        // Estado
+
         const statusDiv = row.querySelector('.row-status');
-        if (challenge.completed) {
+        if (challenge.passed == true) {
             row.classList.add('row-completed-bg');
             statusDiv.innerHTML = '<span class="status-badge status-completed">✔ Completado</span>';
+        } else if (challenge.passed == null){
+            statusDiv.innerHTML = '<span class="status-badge status-pending">Sin intentos</span>';
         } else {
-            statusDiv.innerHTML = '<span class="status-badge status-pending">Pendiente</span>';
+            row.classList.add('row-rejected-bg');
+            statusDiv.innerHTML = '<span class="status-badge status-incomplete">✘ Rechazado</span>';
         }
 
-        row.addEventListener('click', () => openModal(challenge.id));
+        row.addEventListener('click', () => openModal(challenge));
 
         elements.list.appendChild(clone);
     });
@@ -113,26 +133,20 @@ function renderList() {
 
 // Modal Functions
 
-function openModal(id) {
-    const challenge = challengesData.find(c => c.id === id);
-    if (!challenge) return;
-
-    currentChallengeId = id;
-
-    elements.mTitle.textContent = challenge.title;
+function openModal(challenge) {
+    elements.mTitle.textContent = challenge.name;
     elements.mTag.textContent = challenge.tag;
-    elements.mDesc.textContent = challenge.desc;
-    
+    elements.mDesc.textContent = challenge.description;
+    const clientIp = window.location.hostname;
+    elements.sshCommand.textContent = `ssh -i <ruta de la llave privada> shellquest@${clientIp} ${challenge.tag}`;
     //feedback
     elements.mFeedback.style.display = 'none';
     elements.mFeedback.className = "feedback-msg";
-    elements.btnValidate.style.display = 'inline-block';
     elements.modal.classList.add('active');
 }
 
 function closeModal() {
     elements.modal.classList.remove('active');
-    currentChallengeId = null;
 }
 
 function showFeedback(msg, type) {
@@ -142,39 +156,3 @@ function showFeedback(msg, type) {
 }
 
 
-async function validateSolution() {
-
-    const originalText = elements.btnValidate.textContent;
-    elements.btnValidate.textContent = "Verificando...";
-    elements.btnValidate.disabled = true;
-
-    try {
-        await new Promise(resolve => setTimeout(resolve, 600));
-
-        const challenge = challengesData.find(c => c.id === currentChallengeId);
-
-        //  Pedir al back que valide la solucion 
-
-        if (true) {
-
-            challenge.completed = true;
-            showFeedback("🎉 ¡Correcto!", "success");
-            renderList();
-            
-            // Cerrar modal tras breve espera
-            setTimeout(() => {
-                closeModal();
-            }, 1500);
-
-        } else {
-            // ERROR
-            showFeedback("❌ Inténtalo de nuevo.", "error");
-        }
-
-    } catch (err) {
-        showFeedback("Error de conexión.", "error");
-    } finally {
-        elements.btnValidate.textContent = originalText;
-        elements.btnValidate.disabled = false;
-    }
-}
